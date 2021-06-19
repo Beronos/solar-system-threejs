@@ -109,22 +109,6 @@ document.addEventListener("DOMContentLoaded", function(){
             solarSystem.add(planet);
         }
 
-
-
-        // let wordlMapIMG = new THREE.ImageUtils.loadTexture(models.earth.src);
-        
-        // const earthMaterial = new THREE.MeshPhongMaterial({
-        //     map: wordlMapIMG,
-        // });
-
-        
-        // let earth = new THREE.Mesh(new THREE.SphereGeometry(15,32,32), earthMaterial);
-        // earth.position.x = 2;
-        // earth.position.y = 95;
-        // earth.position.z = 5;
-        // solarSystem.add(earth);
-
-
         solarSystem.traverse(function(object){
             if(object instanceof THREE.Mesh){
                 object.castShadow = true;
