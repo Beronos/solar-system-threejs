@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", function(){
     const scene = new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer(
+        {antialias:true}
+    );
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapEnabled = true;
+    
 
     // renderer.setClearColor(0x000,1);
     //LIGHTS -- Ambient Light
@@ -19,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function(){
     //Point Light
 
     const pLight = new THREE.PointLight(0x606060, 1.0);
-    pLight.position.set(200, 200, -400);
+    pLight.position.set(0, 1, 1).normalize();
     scene.add(pLight);
 
     //Spot Light
@@ -35,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     //adding stars
     let starGeo = new THREE.Geometry();
-      for(let i=0; i< 9000; i++) {
+      for(let i=0; i< 200; i++) {
         let star = new THREE.Vector3(
           Math.random() * 600 - 300,
           Math.random() * 600 - 300,
@@ -49,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function(){
     let sprite = new THREE.TextureLoader().load( 'images/star.png' );
     let starMaterial = new THREE.ParticleBasicMaterial({
     color: 0xaaaaaa,
-    size: 1,
+    size: 0.5,
     map: sprite,
     blending: THREE.AdditiveBlending,
     });
@@ -58,6 +61,8 @@ document.addEventListener("DOMContentLoaded", function(){
     stars.sortParticles = true;
 
     scene.add(stars);
+
+    
 
     
     // var radius = 100, segments = 64,
@@ -73,12 +78,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 40000);
-    camera.position.set(-300, 300, -250);
+    const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 1, 20000);
+    camera.position.set(-800, 400, 520);
     camera.lookAt(scene.position);
     scene.add(camera);
 
     const controls = new THREE.TrackballControls(camera, renderer.domElement);
+    
     const keyboard = new THREEx.KeyboardState();
 
     document.getElementById("WebGL-Output").append(renderer.domElement);
@@ -101,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function(){
             const planetMaterial = new THREE.MeshPhongMaterial({
                 map: planetTexture,
             });
+
+            
 
             let planet = new THREE.Mesh(new THREE.SphereGeometry(obj.radius,obj.widthSegment,obj.heightSegment), planetMaterial);
             planet.position.x = obj.cords.x;
