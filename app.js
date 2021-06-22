@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function(){
     renderer.shadowMapEnabled = true;
     
 
-    // renderer.setClearColor(0x000,1);
     //LIGHTS -- Ambient Light
     const ambiColor = 0x8c8c8c;
     const ambientLight = new THREE.AmbientLight(ambiColor);
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     //adding stars
     let starGeo = new THREE.Geometry();
-      for(let i=0; i< 200; i++) {
+      for(let i=0; i< 12000; i++) {
         let star = new THREE.Vector3(
           Math.random() * 600 - 300,
           Math.random() * 600 - 300,
@@ -62,23 +61,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     scene.add(stars);
 
-    
 
-    
-    // var radius = 100, segments = 64,
-    // material = new THREE.LineBasicMaterial( { color: 0x0000ff } ),
-    // geometry = new THREE.CircleGeometry( radius, segments );
-
-
-    // geometry.vertices.shift();
-
-    // let line =  new THREE.Line( geometry, material );
-    // line.rotation.x = 180;
-    // scene.add( line );
-
-
-
-    const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 1, 20000);
+    const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 2000);
     camera.position.set(-800, 400, 520);
     camera.lookAt(scene.position);
     scene.add(camera);
@@ -172,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function(){
           });
           starGeo.verticesNeedUpdate = true;
           stars.rotation.y +=0.002;
+        solarSystem.rotation.y += 0.003 ;
         renderer.render(scene, camera);
     }
 })
