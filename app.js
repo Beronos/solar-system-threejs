@@ -34,35 +34,33 @@ document.addEventListener("DOMContentLoaded", function(){
     spotLight.castShadow = true;
     scene.add(spotLight);
 
-
-    //adding stars
     let starGeo = new THREE.Geometry();
-      for(let i=0; i< 12000; i++) {
+      
+    let starMaterial = new THREE.ParticleBasicMaterial({
+    color: 0xaaaaaa,
+    size: 1,
+    map: new THREE.TextureLoader().load( 'images/star.png' ),   
+    blending: THREE.AdditiveBlending,
+    transparent: true
+    });
+
+    for(let i = 0; i< 12000; i++) {
         let star = new THREE.Vector3(
-          Math.random() * 600 - 300,
-          Math.random() * 600 - 300,
-          Math.random() * 600 - 300
+          Math.random() * 800 - 450,
+          Math.random() * 800 - 450,
+          Math.random() * 800 - 450
         );
         star.velocity = 0;
         star.acceleration = 0.02;
         starGeo.vertices.push(star);
       }
-      
-    let sprite = new THREE.TextureLoader().load( 'images/star.png' );
-    let starMaterial = new THREE.ParticleBasicMaterial({
-    color: 0xaaaaaa,
-    size: 0.5,
-    map: sprite,
-    blending: THREE.AdditiveBlending,
-    });
 
     let stars = new THREE.ParticleSystem(starGeo,starMaterial);
     stars.sortParticles = true;
-
     scene.add(stars);
 
 
-    const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.01, 5000);
     camera.position.set(-800, 400, 520);
     camera.lookAt(scene.position);
     scene.add(camera);
@@ -72,55 +70,53 @@ document.addEventListener("DOMContentLoaded", function(){
     const keyboard = new THREEx.KeyboardState();
 
     document.getElementById("WebGL-Output").append(renderer.domElement);
-
-
-
-
-    const solarSystem = new THREE.Object3D();
-
-    createSolarSystem(solarSystem);
-    scene.add(solarSystem);
-
-
-    function createSolarSystem(solarSystem){
-        
-
-        for(let obj of celestialObjects){
-            console.log(obj);
-            let planetTexture = new THREE.ImageUtils.loadTexture(obj.src);
-            const planetMaterial = new THREE.MeshPhongMaterial({
-                map: planetTexture,
-            });
-
-            
-
-            let planet = new THREE.Mesh(new THREE.SphereGeometry(obj.radius,obj.widthSegment,obj.heightSegment), planetMaterial);
-            planet.position.x = obj.cords.x;
-            planet.position.y = obj.cords.y;
-            planet.position.z = obj.cords.z;
-            solarSystem.add(planet);
-        }
-
-        solarSystem.traverse(function(object){
-            if(object instanceof THREE.Mesh){
-                object.castShadow = true;
-                object.receiveShadow = true;
-            }
-        })
-
-    }
-
-    window.addEventListener("resize", onWindowResize, false);
+    let planets = [];
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-    }    
+    }   
+        
+    function addObject(obj){
+        let planetTexture = new THREE.ImageUtils.loadTexture(obj.src);
+            const planetMaterial = new THREE.MeshPhongMaterial({
+                map: planetTexture,
+        });
+        
+        
+        let planet = {
+            name: obj.name,
+            orbit: obj.orbit,
+            speed: obj.speed,
+            model: new THREE.Mesh(new THREE.SphereGeometry(obj.radius,obj.widthSegment,obj.heightSegment), planetMaterial)
+        };
+        planets.push(planet);
+        scene.add(planet.model);
+        if(planet.name !== 'sun'){
+
+        }
+    }
+
+    function addLine(radius){
+        material = new THREE.LineBasicMaterial( { color: 0xbecde6 } ),
+        geometry = new THREE.CircleGeometry( radius, 64 );
+
+        geometry.vertices.shift();
+        let line =  new THREE.Line( geometry, material );
+        line.rotation.x = 1.54;
+        scene.add(line);
+    }
+
+    window.addEventListener("resize", onWindowResize, false);
+
+    addObject(sunObject);
+    for(let obj of celestialObjects){
+        addObject(obj);
+        addLine(obj.orbit);
+    }
 
     animate();
-
-    
 
     function animate(){
         requestAnimationFrame(animate);
@@ -136,27 +132,52 @@ document.addEventListener("DOMContentLoaded", function(){
             solarSystem.rotation.y += 0.02;
         }
         if(keyboard.pressed("up")){
-            solarSystem.rotation.x -= 0.02;
+            line.rotation.x += 0.01;
+            console.log(line.rotation.x);
         }
         if(keyboard.pressed("down")){
-            solarSystem.rotation.x += 0.02;
+            line.rotation.x -= 0.02;
+            console.log(line.rotation.x);
         }
         controls.update();
     }
 
     function render(){
-        starGeo.vertices.forEach(p => {
-            p.velocity += p.acceleration
-            p.y -= p.velocity;
+
+        let date = Date.now() * 0.0001;
+        // p1.position.set(
+        // Math.cos(date) * orbitRadius,
+        // 0,
+        // Math.sin(date) * orbitRadius
+        // );
+        starGeo.vertices.forEach(s => {
+            s.velocity += s.acceleration
+            s.y -= s.velocity;
             
-            if (p.y < -200) {
-              p.y = 200;
-              p.velocity = 0;
+            if (s.y < -200) {
+              s.y = 200;
+              s.velocity = 0;
             }
           });
+
+          planets.forEach(planet => {
+
+            planet.model.rotation.y += 0.05
+            
+            if(planet.name !== "sun"){
+                planet.model.position.x = Math.cos(date * planet.speed) * planet.orbit;
+                planet.model.position.z = Math.sin(date * planet.speed) * planet.orbit;
+                if(['venus','jupyter'].includes(planet.name)){
+                    planet.model.position.x = Math.cos(-date * planet.speed) * planet.orbit;
+                    planet.model.position.z = Math.sin(-date * planet.speed) * planet.orbit;
+                }
+            }
+
+
+
+          })
           starGeo.verticesNeedUpdate = true;
           stars.rotation.y +=0.002;
-        solarSystem.rotation.y += 0.003 ;
         renderer.render(scene, camera);
     }
 })

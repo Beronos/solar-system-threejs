@@ -1,67 +1,85 @@
 let celestialObjects = [
     {
-        src: "images/sun.png",
-        cords: {x:25, y:0, z:20},
-        radius: 30,
-        widthSegment: 32,
-        heightSegment: 32
-    },
-    {
+        name: "mercury",
         src: "images/mercury.jpg",
-        cords: {x:-60, y:5, z:20},
-        radius: 14,
-        widthSegment: 18,
-        heightSegment: 18
+        radius: 9,
+        orbit: 60,
+        widthSegment: 11,
+        heightSegment: 11,
+        speed: 10.7
     },
     {
+        name: "venus",
         src: "images/venus.jpg",
-        cords: {x:100, y:5, z:20},
         radius: 14,
-        widthSegment: 18,
-        heightSegment: 18
+        orbit: 80,
+        widthSegment: 13,
+        heightSegment: 13,
+        speed: 7.8
     },
     {
+        name: "earth",
         src: "images/earth.jpg",
-        cords: {x:-135, y:5, z:20},
-        radius: 14,
-        widthSegment: 18,
-        heightSegment: 18
+        radius: 15,
+        orbit: 105,
+        widthSegment: 14,
+        heightSegment: 14,
+        speed:6.6
     },
     {
+        name: "mars",
         src: "images/mars1.jpg",
-        cords: {x:165, y:5, z:20},
-        radius: 14,
-        widthSegment: 18,
-        heightSegment: 18
+        radius: 11,
+        orbit: 128,
+        widthSegment: 12,
+        heightSegment: 12,
+        speed: 5.3,
     },
     {
+        name: "jupyter",
         src: "images/jupiter.jpg",
-        cords: {x:-200, y:5, z:20},
-        radius: 20,
-        widthSegment: 18,
-        heightSegment: 18
+        radius: 28,
+        orbit: 175,
+        widthSegment: 20,
+        heightSegment: 20,
+        speed: 2.9,
     },
     {
+        name: "saturn",
         src: "images/saturn.jpg",
-        cords: {x:245, y:5, z:20},
-        radius: 19,
+        radius: 24,
+        orbit: 240,
         widthSegment: 18,
-        heightSegment: 18
+        heightSegment: 18,
+        speed: 2.1,
     },
     {
+        name: "uranus",
         src: "images/uranus.jpg",
-        cords: {x:-285, y:5, z:20},
-        radius: 15,
-        widthSegment: 18,
-        heightSegment: 18
+        radius: 18,
+        orbit: 300,
+        widthSegment: 16,
+        heightSegment: 16,
+        speed: 1.5,
     },
     {
+        name: "neptune",
         src: "images/neptune.jpg",
-        cords: {x:320, y:5, z:20},
-        radius: 15,
-        widthSegment: 18,
-        heightSegment: 18
-    }
-    
+        radius: 18,
+        orbit: 350,
+        widthSegment: 16,
+        heightSegment: 16,
+        speed: 1.2,
+    },
+
+
 ]
 
+let sunObject = {
+    name: "sun",
+    src: "images/sun.png",
+    cords: {x:0, y:0, z:0},
+    radius: 45,
+    widthSegment: 32,
+    heightSegment: 32
+}
