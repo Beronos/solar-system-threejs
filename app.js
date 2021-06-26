@@ -126,18 +126,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function update(){
         if(keyboard.pressed("left")){
-            solarSystem.rotation.y -= 0.02;
-        }
+            planets.forEach(p => p.model.rotation.y += 0.1);
+       }
         if(keyboard.pressed("right")){
-            solarSystem.rotation.y += 0.02;
-        }
-        if(keyboard.pressed("up")){
-            line.rotation.x += 0.01;
-            console.log(line.rotation.x);
-        }
-        if(keyboard.pressed("down")){
-            line.rotation.x -= 0.02;
-            console.log(line.rotation.x);
+            planets.forEach(p => p.model.rotation.y -= 0.1);
+
         }
         controls.update();
     }
